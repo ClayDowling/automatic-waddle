@@ -12,7 +12,19 @@ struct ast* ast_create(char symb)
 
 void ast_release(struct ast* top)
 {
+	struct ast *left;
+	struct ast *right;
+
+	if (NULL == top) {
+		return;
+	}
+
+	left = top->left;
+	right = top->right;
+
 	free(top);
+	ast_release(left);
+	ast_release(right);
 }
 
 void ast_attach_left(struct ast *parent, struct ast *child)

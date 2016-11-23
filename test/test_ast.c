@@ -27,6 +27,7 @@ START_TEST(astAttachLeft_onChildNode_setsParentOnChildLeftOnParent)
 	ck_assert_ptr_eq(parent->left, left);
 	ck_assert_ptr_eq(left->parent, parent);
 
+	ast_release(parent);
 }
 END_TEST
 
