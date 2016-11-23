@@ -14,3 +14,9 @@ void ast_release(struct ast* top)
 {
 	free(top);
 }
+
+void ast_attach_left(struct ast *parent, struct ast *child)
+{
+	parent->left = child;
+	child->parent = parent;
+}

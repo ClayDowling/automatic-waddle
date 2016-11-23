@@ -15,12 +15,28 @@ START_TEST(astCreate_givenA_returnsNodeWithAsymbolAndLeftRightNull)
 }
 END_TEST
 
+START_TEST(astAttachLeft_onChildNode_setsParentOnChildLeftOnParent)
+{
+	struct ast *parent;
+	struct ast *left;
+
+	parent = ast_create('+');
+	left = ast_create('A');
+	ast_attach_left(parent, left);
+
+	ck_assert_ptr_eq(parent->left, left);
+	ck_assert_ptr_eq(left->parent, parent);
+
+}
+END_TEST
+
 TCase *tcase_ast(void)
 {
 	TCase *tc;
 
 	tc = tcase_create("constructor-destructor");
 	tcase_add_test(tc, astCreate_givenA_returnsNodeWithAsymbolAndLeftRightNull);
+	tcase_add_test(tc, astAttachLeft_onChildNode_setsParentOnChildLeftOnParent);
 
 	return tc;
 }

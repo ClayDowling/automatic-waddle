@@ -27,5 +27,13 @@ struct ast* ast_create(char symb);
  */
 void ast_release(struct ast* top);
 
+/**
+ * Attach a child node to the left of a parent node, and 
+ * set the appropriate parent link
+ *
+ * @param parent Parent AST node
+ * @param child AST node which will be left of parent
+ */
+void ast_attach_left(struct ast *parent, struct ast* child);
 
 #endif
