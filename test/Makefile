@@ -3,8 +3,8 @@ LIBS = `pkg-config --libs check`
 VPATH=..
 APPNAME=postinfix
 
-TEST_OBJECTS = test_ast.o
-OBJECTS_UNDER_TEST = ast.o
+TEST_OBJECTS = test_ast.o test_stack.o
+OBJECTS_UNDER_TEST = ast.o stack.o
 TEST_APP = test_$(APPNAME)
 
 all: ${TEST_APP}

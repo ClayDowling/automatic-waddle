@@ -3,6 +3,7 @@
 #include <check.h>
 
 Suite *suite_ast(void);
+Suite *suite_stack(void);
 
 
 int main(int argc, char **argv)
@@ -13,6 +14,7 @@ int main(int argc, char **argv)
 
 	s = suite_ast();
 	runner = srunner_create(s);
+	srunner_add_suite(runner, suite_stack());
 
 	srunner_run_all(runner, CK_NORMAL);
 	number_fails = srunner_ntests_failed(runner);

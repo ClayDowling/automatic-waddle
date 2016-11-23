@@ -15,3 +15,4 @@
 *.swp
 postinfix
 test_postinfix
+.idea/
