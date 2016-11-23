@@ -10,6 +10,8 @@ START_TEST(stackCreate_returnsInitializedStack)
 
     st = stack_create(STACK_SIZE);
     ck_assert_ptr_ne(st, NULL);
+
+    stack_release(st);
 }
 END_TEST
 
