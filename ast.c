@@ -9,3 +9,8 @@ struct ast* ast_create(char symb)
 	node->symbol = symb;
 	return node;
 }
+
+void ast_release(struct ast* top)
+{
+	free(top);
+}

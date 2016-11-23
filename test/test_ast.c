@@ -10,6 +10,8 @@ START_TEST(astCreate_givenA_returnsNodeWithAsymbolAndLeftRightNull)
 	ck_assert_ptr_eq(node->parent, NULL);
 	ck_assert_ptr_eq(node->left, NULL);
 	ck_assert_ptr_eq(node->right, NULL);
+	ast_release(node);
+
 }
 END_TEST
 
