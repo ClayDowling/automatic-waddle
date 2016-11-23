@@ -36,4 +36,13 @@ void ast_release(struct ast* top);
  */
 void ast_attach_left(struct ast *parent, struct ast* child);
 
+/**
+ * Attach a child node to the right of a parent node, and 
+ * set the appropriate parent link
+ *
+ * @param parent Parent AST node
+ * @param child AST node which will be right of parent
+ */
+void ast_attach_right(struct ast *parent, struct ast* child);
+
 #endif

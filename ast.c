@@ -32,3 +32,9 @@ void ast_attach_left(struct ast *parent, struct ast *child)
 	parent->left = child;
 	child->parent = parent;
 }
+
+void ast_attach_right(struct ast *parent, struct ast *child)
+{
+	parent->right = child;
+	child->parent = parent;
+}
