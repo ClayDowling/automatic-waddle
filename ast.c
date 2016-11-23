@@ -5,7 +5,7 @@ struct ast* ast_create(char symb)
 {
 	struct ast *node;
 
-	node = (struct ast*)malloc(sizeof(struct ast));
-
+	node = (struct ast*)calloc(1, sizeof(struct ast));
+	node->symbol = symb;
 	return node;
 }
