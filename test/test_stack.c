@@ -59,6 +59,45 @@ START_TEST(stachPush_withTwoNodes_stackPopReturnsBothNodes)
 }
 END_TEST
 
+START_TEST(stackPop_ifCalledMoreThanStackPush_returnsNull)
+{
+    struct stack *st;
+    struct ast *a;
+
+    st = stack_create(STACK_SIZE);
+    a = ast_create('A');
+    stack_push(st, a);
+    stack_pop(st);
+
+    ck_assert_ptr_eq(stack_pop(st), NULL);
+
+    stack_release(st);
+    ast_release(a);
+}
+END_TEST
+
+START_TEST(stackPush_ifCalledMoreThanStackSize_discardsExtraMembers)
+{
+    struct stack *st;
+    struct ast *a;
+    struct ast *b;
+
+    st = stack_create(1);
+    a = ast_create('A');
+    b = ast_create('B');
+
+    stack_push(st, a);
+    stack_push(st, b);
+
+    ck_assert_ptr_eq(stack_pop(st), a);
+    ck_assert_ptr_eq(stack_pop(st), NULL);
+
+    stack_release(st);
+    ast_release(a);
+    ast_release(b);
+}
+END_TEST
+
 TCase *tcase_stack(void)
 {
     TCase *tc;
@@ -67,6 +106,8 @@ TCase *tcase_stack(void)
     tcase_add_test(tc, stackCreate_returnsInitializedStack);
     tcase_add_test(tc, stackPush_withAstNode_stackPopReturnsNode);
     tcase_add_test(tc, stachPush_withTwoNodes_stackPopReturnsBothNodes);
+    tcase_add_test(tc, stackPop_ifCalledMoreThanStackPush_returnsNull);
+    tcase_add_test(tc, stackPush_ifCalledMoreThanStackSize_discardsExtraMembers);
 
     return tc;
 }

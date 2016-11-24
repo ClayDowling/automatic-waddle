@@ -20,7 +20,8 @@ struct stack *stack_create(int size);
 void stack_release(struct stack* s);
 
 /**
- * Put a new AST node on the stack.
+ * Put a new AST node on the stack.  If the stack is already full the new
+ * node will be discarded.
  * @param s stack to append to.
  * @param node to be put on the stack.
  */

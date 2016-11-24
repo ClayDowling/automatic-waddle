@@ -28,10 +28,15 @@ void stack_release(struct stack *s)
 
 void stack_push(struct stack *s, struct ast *node)
 {
-    s->member[s->idx++] = node;
+    if (s->idx < s->size) {
+        s->member[s->idx++] = node;
+    }
 }
 
 struct ast* stack_pop(struct stack *s)
 {
+    if (s->idx == 0) {
+        return NULL;
+    }
     return s->member[--s->idx];
 }
