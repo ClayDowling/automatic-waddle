@@ -34,7 +34,30 @@ START_TEST(stackPush_withAstNode_stackPopReturnsNode)
 }
 END_TEST
 
+START_TEST(stachPush_withTwoNodes_stackPopReturnsBothNodes)
+{
+    struct stack *st;
+    struct ast *a;
+    struct ast *b;
+    struct ast *actual;
 
+    st = stack_create(STACK_SIZE);
+    a = ast_create('A');
+    b = ast_create('B');
+    stack_push(st, a);
+    stack_push(st, b);
+
+    actual = stack_pop(st);
+    ck_assert_ptr_eq(b, actual);
+
+    actual = stack_pop(st);
+    ck_assert_ptr_eq(a, actual);
+
+    ast_release(a);
+    ast_release(b);
+    stack_release(st);
+}
+END_TEST
 
 TCase *tcase_stack(void)
 {
@@ -43,6 +66,7 @@ TCase *tcase_stack(void)
     tc = tcase_create("constructor-destructor");
     tcase_add_test(tc, stackCreate_returnsInitializedStack);
     tcase_add_test(tc, stackPush_withAstNode_stackPopReturnsNode);
+    tcase_add_test(tc, stachPush_withTwoNodes_stackPopReturnsBothNodes);
 
     return tc;
 }
