@@ -34,6 +34,8 @@ START_TEST(stackPush_withAstNode_stackPopReturnsNode)
 }
 END_TEST
 
+
+
 TCase *tcase_stack(void)
 {
     TCase *tc;
