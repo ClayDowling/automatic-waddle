@@ -1,5 +1,7 @@
 .PHONY: all test clean
 
+CFLAGS=-g --std=c99
+
 APPNAME=postinfix
 
 all: test $(APPNAME)

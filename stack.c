@@ -10,9 +10,28 @@ struct stack {
 
 struct stack *stack_create(int size)
 {
-    return (struct stack*)calloc(1, sizeof(struct stack));
+    struct stack* s;
+    s = (struct stack*)calloc(1, sizeof(struct stack));
+    s->size = size;
+    s->idx = 0;
+    s->member = (struct ast**)calloc(s->size, sizeof(struct ast*));
+    return s;
 }
 void stack_release(struct stack *s)
 {
-    free(s);
+    if (NULL != s) {
+        free(s->member);
+        free(s);
+    }
+
+}
+
+void stack_push(struct stack *s, struct ast *node)
+{
+    s->member[s->idx++] = node;
+}
+
+struct ast* stack_pop(struct stack *s)
+{
+    return s->member[s->idx - 1];
 }
