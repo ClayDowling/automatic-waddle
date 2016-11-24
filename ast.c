@@ -21,8 +21,6 @@ void ast_release(struct ast* top)
 
 	left = top->left;
 	right = top->right;
-	top->left = NULL;
-	top->right = NULL;
 
 	free(top);
 	ast_release(left);
