@@ -16,7 +16,7 @@ ${TEST_APP}: test.o $(TEST_OBJECTS) ${OBJECTS_UNDER_TEST}
 	$(CC) $(CFLAGS) -o $@ $^ $(LIBS)
 
 memtest: ${TEST_APP}
-	valgrind --leak-check=full ./${TEST_APP} --nofork
+	valgrind --leak-check=full --error-exitcode=1 ./${TEST_APP} --nofork
 
 clean:
 	rm -f *.o
