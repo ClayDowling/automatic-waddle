@@ -4,6 +4,7 @@
 
 Suite *suite_ast(void);
 Suite *suite_stack(void);
+Suite *suite_traverse(void);
 
 
 int main(int argc, char **argv)
@@ -20,6 +21,7 @@ int main(int argc, char **argv)
 	s = suite_ast();
 	runner = srunner_create(s);
 	srunner_add_suite(runner, suite_stack());
+    srunner_add_suite(runner, suite_traverse());
 
     if (0 == forkme) {
         srunner_set_fork_status(runner, CK_NOFORK);

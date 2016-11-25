@@ -7,7 +7,7 @@ SET(CMAKE_C_FLAGS ${CHECK_CFLAGS} )
 include_directories(${CHECK_INCLUDE_DIRS})
 
 SET(TEST_SRC
-	test_ast.c test.c test_stack.c)
+	test_ast.c test.c test_stack.c test_traverse.c)
 
 SET(UNIT_UNDER_TEST_SRC
 	../ast.c ../stack.h ../stack.c)

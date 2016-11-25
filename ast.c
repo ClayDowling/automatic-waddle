@@ -38,3 +38,36 @@ void ast_attach_right(struct ast *parent, struct ast *child)
 	parent->right = child;
 	child->parent = parent;
 }
+
+void ast_traverse_postorder(struct ast *top, traverseCallback callback, void *userdata)
+{
+    struct ast *current;
+    struct ast *parent;
+    struct ast *left;
+    struct ast *right;
+
+    current = top;
+    while(NULL != current) {
+        if (current->left && !current->left->visited) {
+            current = current->left;
+            continue;
+        } else if (current->right && !current->right->visited) {
+            current = current->right;
+            continue;
+        }
+
+        if (!current->visited) {
+            current->visited = 1;
+            callback(current, userdata);
+        }
+
+        if (current->left) {
+            current->left->visited = 0;
+        }
+        if (current->right) {
+            current->right->visited = 0;
+        }
+        current = current->parent;
+    }
+
+}

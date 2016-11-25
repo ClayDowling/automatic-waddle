@@ -10,6 +10,7 @@ START_TEST(astCreate_givenA_returnsNodeWithAsymbolAndLeftRightNull)
 	ck_assert_ptr_eq(node->parent, NULL);
 	ck_assert_ptr_eq(node->left, NULL);
 	ck_assert_ptr_eq(node->right, NULL);
+	ck_assert_ptr_eq(node->visited, 0);
 	ast_release(node);
 
 }
@@ -26,6 +27,7 @@ START_TEST(astAttachLeft_onChildNode_setsParentOnChildLeftOnParent)
 
 	ck_assert_ptr_eq(parent->left, left);
 	ck_assert_ptr_eq(left->parent, parent);
+	ck_assert_ptr_eq(parent->parent, NULL);
 
 	ast_release(parent);
 }
@@ -42,6 +44,7 @@ START_TEST(astAttachRight_onChildNode_setsParentOnChildRightOnParent)
 
 	ck_assert_ptr_eq(parent->right, right);
 	ck_assert_ptr_eq(right->parent, parent);
+	ck_assert_ptr_eq(parent->parent, NULL);
 
 	ast_release(parent);
 }

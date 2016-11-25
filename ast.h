@@ -6,10 +6,13 @@
  */
 struct ast {
 	char symbol;		/** Symbol represented by this node */
+	int visited;		/** Has the node been visited during traversal */
 	struct ast *parent;	/** Parent node, NULL if top of tree */
 	struct ast *left;	/** Node most immediately preceeding */
 	struct ast *right;	/** Node most immediately following */
 };
+
+typedef void (*traverseCallback)(struct ast* node, void* userdata);
 
 /**
  * Allocate and initialize an AST node
@@ -44,5 +47,16 @@ void ast_attach_left(struct ast *parent, struct ast* child);
  * @param child AST node which will be right of parent
  */
 void ast_attach_right(struct ast *parent, struct ast* child);
+
+/**
+ * Perform an interative, post-order traversal of the tree pointed to by top.
+ * i.e. take action on both the left and right nodes, then take action on the
+ * current node.
+ * @param top Tree to traverse.
+ * @param callback function which will be called on each node.
+ * @param userdata user supplied data which will be supplied as the second
+ *        parameter to the callback function.
+ */
+void ast_traverse_postorder(struct ast *top, traverseCallback callback, void *userdata);
 
 #endif
