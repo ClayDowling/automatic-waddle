@@ -22,5 +22,5 @@ TARGET_LINK_LIBRARIES(${TEST_NAME}
 	${CHECK_LDFLAGS})
 
 ADD_TEST(UnitTest ${TEST_NAME})
-ADD_TEST(Memory valgrind --leak-check=full ./${TEST_NAME} --nofork)
+ADD_TEST(Memory valgrind --leak-check=full --error-exitcode=1 ./${TEST_NAME} --nofork)
 
