@@ -16,18 +16,33 @@ START_TEST(parseInfix_aPlusB_returnsThreeNodesWithPlusAsParent)
 }
 END_TEST
 
-TCase *tcase_parse_infix(void)
+START_TEST(parseInfix_aPlusBMinusC_returnsFiveNodesWithPlusAsParent)
 {
+    struct ast *tree;
+
+    tree = parse_infix("a+b-c");
+
+    ck_assert_int_eq(tree->symbol, '+');
+    ck_assert_int_eq(tree->left->symbol, 'a');
+    ck_assert_int_eq(tree->right->symbol, '-');
+    ck_assert_int_eq(tree->right->left->symbol, 'b');
+    ck_assert_int_eq(tree->right->right->symbol, 'c');
+
+    ast_release(tree);
+}
+END_TEST
+
+
+TCase *tcase_parse_infix(void) {
     TCase *tc;
 
     tc = tcase_create("parse-infix");
     tcase_add_test(tc, parseInfix_aPlusB_returnsThreeNodesWithPlusAsParent);
-
+    tcase_add_test(tc, parseInfix_aPlusBMinusC_returnsFiveNodesWithPlusAsParent);
     return tc;
 }
 
-Suite *suite_parser(void)
-{
+Suite *suite_parser(void) {
     Suite *s;
 
     s = suite_create("parser");
