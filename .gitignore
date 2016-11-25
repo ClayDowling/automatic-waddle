@@ -16,3 +16,4 @@
 postinfix
 test_postinfix
 .idea/
+cmake-build-debug/
