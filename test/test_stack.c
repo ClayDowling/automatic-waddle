@@ -98,6 +98,39 @@ START_TEST(stackPush_ifCalledMoreThanStackSize_discardsExtraMembers)
 }
 END_TEST
 
+START_TEST(stackPeek_withOneElementOnStack_returnsElement)
+{
+    struct ast *expected;
+    struct ast *actual;
+    struct stack *st;
+
+    expected = ast_create('E');
+
+    st = stack_create(STACK_SIZE);
+    stack_push(st, expected);
+    actual = stack_peek(st);
+
+    ck_assert_ptr_eq(actual, expected);
+
+    ast_release(expected);
+    stack_release(st);
+}
+END_TEST
+
+START_TEST(stackPeek_withEmptyStack_returnsNULL)
+{
+    struct stack *st;
+    struct ast *actual;
+
+    st = stack_create(STACK_SIZE);
+    actual = stack_peek(st);
+
+    ck_assert_ptr_eq(actual, NULL);
+
+    stack_release(st);
+}
+END_TEST
+
 TCase *tcase_stack(void)
 {
     TCase *tc;
@@ -108,6 +141,8 @@ TCase *tcase_stack(void)
     tcase_add_test(tc, stachPush_withTwoNodes_stackPopReturnsBothNodes);
     tcase_add_test(tc, stackPop_ifCalledMoreThanStackPush_returnsNull);
     tcase_add_test(tc, stackPush_ifCalledMoreThanStackSize_discardsExtraMembers);
+    tcase_add_test(tc, stackPeek_withOneElementOnStack_returnsElement);
+    tcase_add_test(tc, stackPeek_withEmptyStack_returnsNULL);
 
     return tc;
 }

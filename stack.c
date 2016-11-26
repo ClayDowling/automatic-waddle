@@ -40,3 +40,11 @@ struct ast* stack_pop(struct stack *s)
     }
     return s->member[--s->idx];
 }
+
+struct ast* stack_peek(struct stack *s)
+{
+    if (s->idx > 0) {
+        return s->member[s->idx - 1];
+    }
+    return NULL;
+}

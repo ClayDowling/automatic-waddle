@@ -32,6 +32,32 @@ START_TEST(parseInfix_aPlusBMinusC_returnsFiveNodesWithPlusAsParent)
 }
 END_TEST
 
+START_TEST(parseInfix_aPlusBTimesC_returnsThreeNodesWithBCChildOfPlus)
+{
+    struct ast *tree;
+    struct ast *plus;
+    struct ast *times;
+    struct ast *a;
+    struct ast *b;
+    struct ast *c;
+
+    tree = parse_infix("a*b+c");
+
+    plus = tree;
+    times = plus->left;
+    b = times->right;
+    a = times->left;
+    c = plus->right;
+
+    ck_assert_int_eq(plus->symbol, '+');
+    ck_assert_int_eq(a->symbol, 'a');
+    ck_assert_int_eq(times->symbol, '*');
+    ck_assert_int_eq(b->symbol, 'b');
+    ck_assert_int_eq(c->symbol, 'c');
+
+    ast_release(tree);
+}
+END_TEST
 
 TCase *tcase_parse_infix(void) {
     TCase *tc;
@@ -39,6 +65,7 @@ TCase *tcase_parse_infix(void) {
     tc = tcase_create("parse-infix");
     tcase_add_test(tc, parseInfix_aPlusB_returnsThreeNodesWithPlusAsParent);
     tcase_add_test(tc, parseInfix_aPlusBMinusC_returnsFiveNodesWithPlusAsParent);
+    tcase_add_test(tc, parseInfix_aPlusBTimesC_returnsThreeNodesWithBCChildOfPlus);
     return tc;
 }
 

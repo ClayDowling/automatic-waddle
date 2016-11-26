@@ -34,4 +34,11 @@ void stack_push(struct stack *s, struct ast *node);
  */
 struct ast* stack_pop(struct stack *s);
 
+/**
+ * Look at the top element of the stack, but leave it on the stack.
+ * @param s Stack to examine
+ * @return struct ast* of the top member, or NULL if the stack is empty
+ */
+struct ast* stack_peek(struct stack *s);
+
 #endif //POSTINFIX_STACK_H
