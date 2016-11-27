@@ -11,6 +11,7 @@ struct ast* ast_create(char symb)
 
 	node = (struct ast*)calloc(1, sizeof(struct ast));
 	node->symbol = symb;
+    node->operator = operator_get(symb);
 	return node;
 }
 

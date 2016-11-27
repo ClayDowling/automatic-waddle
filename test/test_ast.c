@@ -11,9 +11,33 @@ START_TEST(astCreate_givenA_returnsNodeWithAsymbolAndLeftRightNull)
 	ck_assert_ptr_eq(node->left, NULL);
 	ck_assert_ptr_eq(node->right, NULL);
 	ck_assert_int_eq(node->visited, 0);
-	ck_assert_ptr_eq(node->operator, NULL);
+	ck_assert_ptr_eq(node->operator, &OP_VARIABLE);
 	ast_release(node);
 
+}
+END_TEST
+
+struct ast_operator_test {
+    char symbol;
+    struct operator_t *op;
+} op_tests[] = {
+        {'z', &OP_VARIABLE},
+        {'+', &OP_PLUS},
+        {'-', &OP_MINUS},
+        {'*', &OP_TIMES},
+        {'/', &OP_DIVIDE},
+        {'^', &OP_EXPONENT},
+        {'(', &OP_LEFTPAREN},
+        {')', &OP_RIGHTPAREN}
+};
+
+START_TEST(astCreate_setsOperator)
+{
+    struct ast *node = ast_create(op_tests[_i].symbol);
+    ck_assert_ptr_eq(node->operator, op_tests[_i].op);
+    if (NULL != node) {
+        ast_release(node);
+    }
 }
 END_TEST
 
@@ -51,6 +75,16 @@ START_TEST(astAttachRight_onChildNode_setsParentOnChildRightOnParent)
 }
 END_TEST
 
+TCase *tcase_ast_operator(void)
+{
+    TCase *tc;
+
+    tc = tcase_create("operators");
+    tcase_add_loop_test(tc, astCreate_setsOperator, 0, sizeof(op_tests) / sizeof(struct ast_operator_test));
+
+    return tc;
+}
+
 TCase *tcase_ast(void)
 {
 	TCase *tc;
@@ -59,7 +93,6 @@ TCase *tcase_ast(void)
 	tcase_add_test(tc, astCreate_givenA_returnsNodeWithAsymbolAndLeftRightNull);
 	tcase_add_test(tc, astAttachLeft_onChildNode_setsParentOnChildLeftOnParent);
 	tcase_add_test(tc, astAttachRight_onChildNode_setsParentOnChildRightOnParent);
-
 	return tc;
 }
 
@@ -69,6 +102,7 @@ Suite *suite_ast(void)
 
 	s = suite_create("abstract-syntax-tree");
 	suite_add_tcase(s, tcase_ast());
+    suite_add_tcase(s, tcase_ast_operator());
 
 	return s;
 }
