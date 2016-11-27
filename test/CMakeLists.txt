@@ -7,10 +7,10 @@ SET(CMAKE_C_FLAGS ${CHECK_CFLAGS} )
 include_directories(${CHECK_INCLUDE_DIRS})
 
 SET(TEST_SRC
-	test_ast.c test.c test_stack.c test_traverse.c test_parser.c)
+	test_ast.c test.c test_stack.c test_traverse.c test_parser.c test_parsecontext.c)
 
 SET(UNIT_UNDER_TEST_SRC
-	../ast.c ../stack.h ../stack.c ../parser.h ../parser.c ../operator.h ../operator.c)
+	../ast.c ../stack.h ../stack.c ../parser.h ../parser.c ../operator.h ../operator.c ../parse_context.h ../parse_context.c)
 
 SET(TEST_NAME test_${PROJECT_NAME})
 ADD_EXECUTABLE(${TEST_NAME}
