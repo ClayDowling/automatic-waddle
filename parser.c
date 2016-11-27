@@ -5,7 +5,7 @@
 #include "operator.h"
 #include "parse_context.h"
 
-void handle_right_paren(struct ast *node, struct parse_context *context)
+void right_paren_action(struct ast *node, struct parse_context *context)
 {
     struct ast *last;
     for(last = stack_pop(context->opstack); last->symbol != '('; last = stack_pop(context->opstack)) {
@@ -17,7 +17,7 @@ void handle_right_paren(struct ast *node, struct parse_context *context)
     ast_release(node);
 }
 
-void handle_operation(struct ast *node, struct parse_context *context)
+void operation_action(struct ast *node, struct parse_context *context)
 {
     struct ast *last;
     for(last = stack_peek(context->opstack);
@@ -31,12 +31,12 @@ void handle_operation(struct ast *node, struct parse_context *context)
     stack_push(context->opstack, node);
 }
 
-void handle_leftparen(struct ast *node, struct parse_context *context)
+void leftparen_action(struct ast *node, struct parse_context *context)
 {
     stack_push(context->opstack, node);
 }
 
-void handle_variable(struct ast *node, struct parse_context *context)
+void variable_action(struct ast *node, struct parse_context *context)
 {
     stack_push(context->expstack, node);
 }
@@ -54,13 +54,13 @@ struct ast* parse_infix(const char *source)
         x = source[i];
         node = ast_create(x);
         if (node->operator == &OP_VARIABLE) {
-            handle_variable(node, context);
+            variable_action(node, context);
         } else if(node->operator == &OP_LEFTPAREN) {
-            handle_leftparen(node, context);
+            leftparen_action(node, context);
         } else if (node->operator == &OP_RIGHTPAREN) {
-            handle_right_paren(node, context);
+            right_paren_action(node, context);
         } else {
-            handle_operation(node, context);
+            operation_action(node, context);
         }
     }
 
