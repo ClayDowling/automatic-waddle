@@ -1,12 +1,15 @@
 #ifndef _AST_H_
 #define _AST_H_
 
+#include "operator.h"
+
 /**
  * Represents a single variable or operation in an Abstract Syntax Tree
  */
 struct ast {
 	char symbol;		/** Symbol represented by this node */
 	int visited;		/** Has the node been visited during traversal */
+	struct operator_t *operator; /** Cached operator */
 	struct ast *parent;	/** Parent node, NULL if top of tree */
 	struct ast *left;	/** Node most immediately preceeding */
 	struct ast *right;	/** Node most immediately following */

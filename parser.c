@@ -30,6 +30,8 @@ struct ast* parse_infix(const char *source)
                 ast_attach_left(last, stack_pop(expstack));
                 stack_push(expstack, last);
             }
+            ast_release(last);
+            ast_release(operation);
         } else {
             last = stack_peek(opstack);
             if (NULL != last) {

@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "ast.h"
+#include "operator.h"
 
 struct ast* ast_create(char symb)
 {
