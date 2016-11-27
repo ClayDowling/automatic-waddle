@@ -59,4 +59,11 @@ void ast_attach_right(struct ast *parent, struct ast* child);
  */
 void ast_traverse_postorder(struct ast *top, traverseCallback callback, void *userdata);
 
+/**
+ * String the symbols out in the order they were gathered via an ast_traverse_postorder
+ * @param top
+ * @return string value of the aggregated symbols.  Caller is responsible for freeing.
+ */
+char *ast_postfix(struct ast *top);
+
 #endif

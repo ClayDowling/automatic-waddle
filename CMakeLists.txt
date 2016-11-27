@@ -5,7 +5,7 @@ enable_testing()
 add_subdirectory(test)
 
 set(APP_SOURCE
-	ast.c ast.h stack.h stack.c parser.h parser.c)
+	ast.c ast.h stack.h stack.c parser.h parser.c operator.h operator.c)
 
 
 add_executable(${PROJECT_NAME}

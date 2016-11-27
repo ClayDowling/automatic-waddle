@@ -1,3 +1,6 @@
+#define _POSIX_C_SOURCE 200809L
+
+#include <string.h>
 #include <stdlib.h>
 #include "ast.h"
 
@@ -70,4 +73,23 @@ void ast_traverse_postorder(struct ast *top, traverseCallback callback, void *us
         current = current->parent;
     }
 
+}
+
+char postfix_buffer[4096];
+int postfix_idx = 0;
+
+void aggregate_tree(struct ast *node, void *notused)
+{
+    if (postfix_idx < sizeof(postfix_buffer))
+        postfix_buffer[postfix_idx++] = node->symbol;
+}
+
+char *ast_postfix(struct ast *top)
+{
+    postfix_idx = 0;
+    memset(postfix_buffer, 0, sizeof(postfix_buffer));
+
+    ast_traverse_postorder(top, aggregate_tree, NULL);
+
+    return strdup(postfix_buffer);
 }
