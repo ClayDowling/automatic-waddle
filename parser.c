@@ -8,6 +8,7 @@ struct operator_t {
     int precedence;
 };
 
+struct operator_t OP_VARIABLE = {0, 0};
 struct operator_t OP_PLUS = {'+', 1};
 struct operator_t OP_MINUS = {'-', 2};
 struct operator_t OP_TIMES = {'*', 3};
@@ -30,7 +31,7 @@ struct operator_t* get_operator(char op)
             return operators[i];
         }
     }
-    return NULL;
+    return &OP_VARIABLE;
 }
 
 struct ast* parse_infix(const char *source)
@@ -49,9 +50,20 @@ struct ast* parse_infix(const char *source)
         x = source[i];
         operation = ast_create(x);
         op = get_operator(x);
-        if (op == NULL) {
+        if (op == &OP_VARIABLE) {
             stack_push(expstack, operation);
         } else {
+            last = stack_peek(opstack);
+            if (NULL != last) {
+                struct operator_t *op2;
+                op2 = get_operator(last->symbol);
+                while(op->precedence <= op2->precedence) {
+                    op2 = stack_pop(opstack);
+                    ast_attach_right(last, stack_pop(expstack));
+                    ast_attach_left(last, stack_pop(expstack));
+                    stack_push(expstack, last);
+                }
+            }
             stack_push(opstack, operation);
         }
     }

@@ -23,7 +23,6 @@ void stack_release(struct stack *s)
         free(s->member);
         free(s);
     }
-
 }
 
 void stack_push(struct stack *s, struct ast *node)
