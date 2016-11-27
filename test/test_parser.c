@@ -33,7 +33,7 @@ START_TEST(parseInfix_aPlusBMinusC_returnsFiveNodesWithPlusAsParent)
 }
 END_TEST
 
-START_TEST(parseInfix_aTimesBPlusC_returnsThreeNodesWithTimesOfPlus)
+START_TEST(parseInfix_aTimesBPlusC_returnsFiveNodesWithTimesChildOfPlus)
 {
     struct ast *tree;
     struct ast *plus;
@@ -88,7 +88,7 @@ TCase *tcase_parse_infix(void) {
     tc = tcase_create("parse-infix");
     tcase_add_test(tc, parseInfix_aPlusB_returnsThreeNodesWithPlusAsParent);
     tcase_add_test(tc, parseInfix_aPlusBMinusC_returnsFiveNodesWithPlusAsParent);
-    tcase_add_test(tc, parseInfix_aTimesBPlusC_returnsThreeNodesWithTimesOfPlus);
+    tcase_add_test(tc, parseInfix_aTimesBPlusC_returnsFiveNodesWithTimesChildOfPlus);
     tcase_add_test(tc, parseInfix_aTimesParenBPlusCParen_returnsThreeNodesWithBCChildOfTimes);
     return tc;
 }
