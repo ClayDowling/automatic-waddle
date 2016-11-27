@@ -5,7 +5,41 @@
 #include "operator.h"
 #include "parse_context.h"
 
+void handle_right_paren(struct ast *node, struct parse_context *context)
+{
+    struct ast *last;
+    for(last = stack_pop(context->opstack); last->symbol != '('; last = stack_pop(context->opstack)) {
+        ast_attach_right(last, stack_pop(context->expstack));
+        ast_attach_left(last, stack_pop(context->expstack));
+        stack_push(context->expstack, last);
+    }
+    ast_release(last);
+    ast_release(node);
+}
 
+void handle_operation(struct ast *node, struct parse_context *context)
+{
+    struct ast *last;
+    for(last = stack_peek(context->opstack);
+        NULL != last && node->operator->precedence <= last->operator->precedence;
+        last = stack_peek(context->opstack)) {
+        stack_pop(context->opstack);
+        ast_attach_right(last, stack_pop(context->expstack));
+        ast_attach_left(last, stack_pop(context->expstack));
+        stack_push(context->expstack, last);
+    }
+    stack_push(context->opstack, node);
+}
+
+void handle_leftparen(struct ast *node, struct parse_context *context)
+{
+    stack_push(context->opstack, node);
+}
+
+void handle_variable(struct ast *node, struct parse_context *context)
+{
+    stack_push(context->expstack, node);
+}
 
 struct ast* parse_infix(const char *source)
 {
@@ -20,27 +54,13 @@ struct ast* parse_infix(const char *source)
         x = source[i];
         node = ast_create(x);
         if (node->operator == &OP_VARIABLE) {
-            stack_push(context->expstack, node);
+            handle_variable(node, context);
         } else if(node->operator == &OP_LEFTPAREN) {
-            stack_push(context->opstack, node);
+            handle_leftparen(node, context);
         } else if (node->operator == &OP_RIGHTPAREN) {
-            for(last = stack_pop(context->opstack); last->symbol != '('; last = stack_pop(context->opstack)) {
-                ast_attach_right(last, stack_pop(context->expstack));
-                ast_attach_left(last, stack_pop(context->expstack));
-                stack_push(context->expstack, last);
-            }
-            ast_release(last);
-            ast_release(node);
+            handle_right_paren(node, context);
         } else {
-            for(last = stack_peek(context->opstack);
-                NULL != last && node->operator->precedence <= last->operator->precedence;
-                last = stack_peek(context->opstack)) {
-                    stack_pop(context->opstack);
-                    ast_attach_right(last, stack_pop(context->expstack));
-                    ast_attach_left(last, stack_pop(context->expstack));
-                    stack_push(context->expstack, last);
-            }
-            stack_push(context->opstack, node);
+            handle_operation(node, context);
         }
     }
 
