@@ -117,10 +117,39 @@ void aggregate_tree(struct ast *node, void *notused)
         postfix_buffer[postfix_idx++] = node->symbol;
 }
 
+int needs_parent(struct ast *parent, struct ast *child)
+{
+    if (NULL == parent || NULL == child) {
+        return 0;
+    }
+    if (parent->operator == &OP_VARIABLE || child->operator == &OP_VARIABLE) {
+        return 0;
+    }
+    if (parent->operator->precedence > child->operator->precedence) {
+        return 1;
+    }
+    return 0;
+}
+
 void aggregate_infix_tree(struct ast *node, void *notused)
 {
+    if (node->parent && node->parent->parent) {
+        if (needs_parent(node->parent->parent, node->parent)) {
+            if (!node->parent->visited) // We're a left node
+                postfix_buffer[postfix_idx++] = '(';
+        }
+    }
+
     if (postfix_idx < sizeof(postfix_buffer))
         postfix_buffer[postfix_idx++] = node->symbol;
+
+    if (node->parent && node->parent->parent) {
+        if (needs_parent(node->parent->parent, node->parent)) {
+            if (node->parent->visited) // We're a right node
+                postfix_buffer[postfix_idx++] = ')';
+        }
+    }
+
 }
 
 char *ast_postfix(struct ast *top)
