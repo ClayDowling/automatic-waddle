@@ -36,6 +36,21 @@ START_TEST(convert_infix_to_rpn)
 }
 END_TEST
 
+START_TEST(convert_infix_to_infix)
+{
+    struct ast *tree;
+    char *actual;
+
+    tree = parse_infix(cases[_i].infix);
+    actual = ast_infix(tree);
+    ck_assert_str_eq(actual, cases[_i].infix);
+
+    free(actual);
+    ast_release(tree);
+
+}
+END_TEST
+
 TCase *tcase_infix(void)
 {
     TCase *tc;
@@ -43,6 +58,7 @@ TCase *tcase_infix(void)
     tc = tcase_create("infix-to-rpn");
 
     tcase_add_loop_test(tc, convert_infix_to_rpn, 0, num_cases);
+    tcase_add_loop_test(tc, convert_infix_to_infix, 0, num_cases);
 
     return tc;
 }

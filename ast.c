@@ -117,12 +117,28 @@ void aggregate_tree(struct ast *node, void *notused)
         postfix_buffer[postfix_idx++] = node->symbol;
 }
 
+void aggregate_infix_tree(struct ast *node, void *notused)
+{
+    if (postfix_idx < sizeof(postfix_buffer))
+        postfix_buffer[postfix_idx++] = node->symbol;
+}
+
 char *ast_postfix(struct ast *top)
 {
     postfix_idx = 0;
     memset(postfix_buffer, 0, sizeof(postfix_buffer));
 
     ast_traverse_postorder(top, aggregate_tree, NULL);
+
+    return strdup(postfix_buffer);
+}
+
+char *ast_infix(struct ast *top)
+{
+    postfix_idx = 0;
+    memset(postfix_buffer, 0, sizeof(postfix_buffer));
+
+    ast_traverse_inorder(top, aggregate_infix_tree, NULL);
 
     return strdup(postfix_buffer);
 }

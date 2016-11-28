@@ -80,4 +80,11 @@ void ast_traverse_inorder(struct ast *top, traverseCallback callback, void *user
  */
 char *ast_postfix(struct ast *top);
 
+/**
+ * Represent the tree as infix notation.
+ * @param top Tree to be represented
+ * @return string value of the tree as infix notation.  Caller is responsible for freeing.
+ */
+char *ast_infix(struct ast *top);
+
 #endif
