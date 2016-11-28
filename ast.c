@@ -77,6 +77,37 @@ void ast_traverse_postorder(struct ast *top, traverseCallback callback, void *us
 
 }
 
+void ast_traverse_inorder(struct ast *top, traverseCallback callback, void *userdata)
+{
+    struct ast *current = top;
+
+    while(current) {
+        if (current->left && !current->left->visited) {
+            current = current->left;
+            continue;
+        }
+        if (!current->visited) {
+            callback(current, userdata);
+            current->visited = 1;
+        }
+        if (current->right && !current->right->visited) {
+            current = current->right;
+            continue;
+        }
+
+        if (current->left) {
+            current->left->visited = 0;
+        }
+        if (current->right) {
+            current->right->visited = 0;
+        }
+        current = current->parent;
+    }
+    if (top) {
+        top->visited = 0;
+    }
+}
+
 char postfix_buffer[4096];
 int postfix_idx = 0;
 

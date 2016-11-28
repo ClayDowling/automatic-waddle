@@ -63,6 +63,17 @@ void ast_attach_right(struct ast *parent, struct ast* child);
 void ast_traverse_postorder(struct ast *top, traverseCallback callback, void *userdata);
 
 /**
+ * Perform an iterative, in-order traversal of the tree pointed to by top.
+ * i.e. take action on the nodes on the left.  Take action on this node.  Take action
+ * on the nodes on the right.
+ * @param top Tree to traverse
+ * @param callback function which will be called on each node.
+ * @param userdata user supplied data which will be supplied as the second
+ *        parameter to the callback function.
+ */
+void ast_traverse_inorder(struct ast *top, traverseCallback callback, void *userdata);
+
+/**
  * String the symbols out in the order they were gathered via an ast_traverse_postorder
  * @param top
  * @return string value of the aggregated symbols.  Caller is responsible for freeing.
