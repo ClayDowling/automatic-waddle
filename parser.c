@@ -41,3 +41,22 @@ struct ast* parse_infix(const char *source)
 
     return last;
 }
+
+struct ast* parse_postfix(const char *source)
+{
+    struct ast *node;
+    struct parse_context *context = parse_context_create();
+
+    for(int i=0; source[i]; ++i) {
+        node = ast_create(source[i]);
+        if (node->operator == &OP_VARIABLE) {
+            stack_push(context->expstack, node);
+        } else {
+            ast_attach_right(node, stack_pop(context->expstack));
+            ast_attach_left(node, stack_pop(context->expstack));
+            stack_push(context->expstack, node);
+        }
+    }
+    parse_context_release(context);
+    return node;
+}
