@@ -131,25 +131,52 @@ int needs_parent(struct ast *parent, struct ast *child)
     return 0;
 }
 
+int i_am_a_leaf(struct ast *node)
+{
+    if (NULL == node) {
+        return 0;
+    }
+    if (node->operator != &OP_VARIABLE) {
+        return 0;
+    }
+    if (NULL == node->parent) {
+        return 0;
+    }
+}
+
+int i_am_a_left_leaf(struct ast *node)
+{
+    if (i_am_a_leaf(node)) {
+        if (!node->parent->visited) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int i_am_a_right_leaf(struct ast *node)
+{
+    if (i_am_a_leaf(node)) {
+        if (node->parent->visited) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
 void aggregate_infix_tree(struct ast *node, void *notused)
 {
-    if (node->parent && node->parent->parent) {
-        if (needs_parent(node->parent->parent, node->parent)) {
-            if (!node->parent->visited) // We're a left node
-                postfix_buffer[postfix_idx++] = '(';
-        }
+
+    if (i_am_a_left_leaf(node) && needs_parent(node->parent->parent, node->parent)) {
+        postfix_buffer[postfix_idx++] = '(';
     }
 
     if (postfix_idx < sizeof(postfix_buffer))
         postfix_buffer[postfix_idx++] = node->symbol;
 
-    if (node->parent && node->parent->parent) {
-        if (needs_parent(node->parent->parent, node->parent)) {
-            if (node->parent->visited) // We're a right node
-                postfix_buffer[postfix_idx++] = ')';
-        }
+    if (i_am_a_right_leaf(node) && needs_parent(node->parent->parent, node->parent)) {
+        postfix_buffer[postfix_idx++] = ')';
     }
-
 }
 
 char *ast_postfix(struct ast *top)
