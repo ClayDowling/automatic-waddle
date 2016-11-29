@@ -164,18 +164,43 @@ int i_am_a_right_leaf(struct ast *node)
     return 0;
 }
 
+void add_parens(struct ast *node)
+{
+    struct ast *parent;
+    struct ast *child;
+    int leftnode = i_am_a_left_leaf(node);
+    char symbol;
+
+    if (leftnode) symbol = '(';
+    else symbol = ')';
+
+    if (node->parent && node->parent->parent) {
+        child = node->parent;
+        parent = node->parent->parent;
+
+        while(parent && parent->operator->precedence > child->operator->precedence) {
+            postfix_buffer[postfix_idx++] = symbol;
+            if (leftnode == parent->visited) {
+                break;
+            }
+            child = parent;
+            parent = parent->parent;
+        }
+    }
+}
+
 void aggregate_infix_tree(struct ast *node, void *notused)
 {
 
-    if (i_am_a_left_leaf(node) && needs_parent(node->parent->parent, node->parent)) {
-        postfix_buffer[postfix_idx++] = '(';
+    if (i_am_a_left_leaf(node)) {
+        add_parens(node);
     }
 
     if (postfix_idx < sizeof(postfix_buffer))
         postfix_buffer[postfix_idx++] = node->symbol;
 
-    if (i_am_a_right_leaf(node) && needs_parent(node->parent->parent, node->parent)) {
-        postfix_buffer[postfix_idx++] = ')';
+    if (i_am_a_right_leaf(node)) {
+        add_parens(node);
     }
 }
 
