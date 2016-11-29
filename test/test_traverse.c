@@ -141,7 +141,7 @@ START_TEST(astTraverseInOrder_givenDeeperRight_visitsDeepLeftFirst)
 END_TEST
 
 START_TEST(astInfix_givenDeeperRight_correctlyEncapsulatesOperatorPriority)
-    {
+{
         struct ast *tree = getDeepRightAst();
         char *actual;
 
@@ -149,7 +149,8 @@ START_TEST(astInfix_givenDeeperRight_correctlyEncapsulatesOperatorPriority)
         ck_assert_str_eq(actual, "C*(A+B)");
 
         ast_release(tree);
-    }
+        free(actual);
+}
 END_TEST
 
 TCase *tcase_traverse(void)
