@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <ctype.h>
 
 #include "parseaction.h"
 #include "parse_context.h"
@@ -32,6 +33,13 @@ void operation_action(struct ast *node, struct parse_context *context)
     stack_push(context->opstack, node);
 }
 
+void postfix_operation_action(struct ast *node, struct parse_context *context)
+{
+    ast_attach_right(node, stack_pop(context->expstack));
+    ast_attach_left(node, stack_pop(context->expstack));
+    stack_push(context->expstack, node);
+}
+
 void leftparen_action(struct ast *node, struct parse_context *context)
 {
     stack_push(context->opstack, node);
@@ -42,7 +50,7 @@ void variable_action(struct ast *node, struct parse_context *context)
     stack_push(context->expstack, node);
 }
 
-parseAction* get_action(struct ast *node)
+parseAction* get_infix_action(struct ast *node)
 {
     if (node->operator == &OP_VARIABLE) {
         return variable_action;
@@ -53,5 +61,14 @@ parseAction* get_action(struct ast *node)
     } else {
         return operation_action;
     }
+}
+
+parseAction* get_postfix_action(struct ast *node)
+{
+    if (node->operator == &OP_VARIABLE) {
+        return variable_action;
+    }
+
+    return postfix_operation_action;
 }
 
