@@ -4,6 +4,9 @@
 #include <stdlib.h>
 #include "ast.h"
 #include "operator.h"
+#include "buffer.h"
+
+#define BUFFER_SIZE 4096
 
 struct ast* ast_create(char symb)
 {
@@ -108,13 +111,10 @@ void ast_traverse_inorder(struct ast *top, traverseCallback callback, void *user
     }
 }
 
-char postfix_buffer[4096];
-int postfix_idx = 0;
-
-void aggregate_tree(struct ast *node, void *notused)
+void aggregate_tree(struct ast *node, void *ptrbuffer)
 {
-    if (postfix_idx < sizeof(postfix_buffer))
-        postfix_buffer[postfix_idx++] = node->symbol;
+    struct buffer *buf = (struct buffer*)ptrbuffer;
+    buffer_append(buf, node->symbol);
 }
 
 int needs_parent(struct ast *parent, struct ast *child)
@@ -164,7 +164,7 @@ int i_am_a_right_leaf(struct ast *node)
     return 0;
 }
 
-void add_parens(struct ast *node)
+void add_parens(struct ast *node, struct buffer *buf)
 {
     struct ast *parent;
     struct ast *child;
@@ -179,7 +179,7 @@ void add_parens(struct ast *node)
         parent = node->parent->parent;
 
         while(parent && parent->operator->precedence > child->operator->precedence) {
-            postfix_buffer[postfix_idx++] = symbol;
+            buffer_append(buf, symbol);
             if (leftnode == parent->visited) {
                 break;
             }
@@ -189,37 +189,42 @@ void add_parens(struct ast *node)
     }
 }
 
-void aggregate_infix_tree(struct ast *node, void *notused)
+void aggregate_infix_tree(struct ast *node, void *ptrbuffer)
 {
+    struct buffer *buf = (struct buffer*)ptrbuffer;
 
     if (i_am_a_left_leaf(node)) {
-        add_parens(node);
+        add_parens(node, buf);
     }
 
-    if (postfix_idx < sizeof(postfix_buffer))
-        postfix_buffer[postfix_idx++] = node->symbol;
+    buffer_append(buf, node->symbol);
 
     if (i_am_a_right_leaf(node)) {
-        add_parens(node);
+        add_parens(node, buf);
     }
 }
 
 char *ast_postfix(struct ast *top)
 {
-    postfix_idx = 0;
-    memset(postfix_buffer, 0, sizeof(postfix_buffer));
+    struct buffer *buf = buffer_create(BUFFER_SIZE);
+    char *result;
 
-    ast_traverse_postorder(top, aggregate_tree, NULL);
+    ast_traverse_postorder(top, aggregate_tree, buf);
 
-    return strdup(postfix_buffer);
+    result = buffer_as_string(buf);
+    buffer_release(buf);
+
+    return result;
 }
 
 char *ast_infix(struct ast *top)
 {
-    postfix_idx = 0;
-    memset(postfix_buffer, 0, sizeof(postfix_buffer));
+    struct buffer *buf = buffer_create(BUFFER_SIZE);
+    char *result;
 
-    ast_traverse_inorder(top, aggregate_infix_tree, NULL);
+    ast_traverse_inorder(top, aggregate_infix_tree, buf);
 
-    return strdup(postfix_buffer);
+    result = buffer_as_string(buf);
+    buffer_release(buf);
+    return result;
 }

@@ -23,8 +23,9 @@ START_TEST(bufferAppend_calledWithA_willReturnAString)
     buf = buffer_create(BUFFER_SIZE);
 
     buffer_append(buf, 'A');
+    buffer_append(buf, 'B');
     actual = buffer_as_string(buf);
-    ck_assert_str_eq(actual, "A");
+    ck_assert_str_eq(actual, "AB");
 
     free(actual);
     buffer_release(buf);
