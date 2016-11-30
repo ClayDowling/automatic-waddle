@@ -4,6 +4,8 @@ CFLAGS=-g --std=c99
 
 APPNAME=postinfix
 
+SRC = ast.o buffer.o operator.o parseaction.o parse_context.o parser.o stack.o
+
 all: test $(APPNAME)
 
 clean:
@@ -14,5 +16,5 @@ clean:
 test:
 	$(MAKE) -C test full
 
-$(APPNAME): main.o
+$(APPNAME): $(SRC) main.o
 	$(CC) -o $@ $^
