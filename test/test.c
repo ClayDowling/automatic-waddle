@@ -8,6 +8,7 @@ Suite *suite_traverse(void);
 Suite *suite_parser(void);
 Suite *suite_parsecontext(void);
 Suite *suite_integration(void);
+Suite *suite_buffer(void);
 
 int main(int argc, char **argv)
 {
@@ -27,6 +28,7 @@ int main(int argc, char **argv)
     srunner_add_suite(runner, suite_parser());
 	srunner_add_suite(runner, suite_parsecontext());
     srunner_add_suite(runner, suite_integration());
+	srunner_add_suite(runner, suite_buffer());
 
     if (0 == forkme) {
         srunner_set_fork_status(runner, CK_NOFORK);
