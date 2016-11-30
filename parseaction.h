@@ -22,4 +22,11 @@ parseAction* get_infix_action(struct ast *node);
  */
 parseAction* get_postfix_action(struct ast *node);
 
+/**
+ * Based on the source, return the correct factory for generating per-node actions.
+ * @param source expression to be parsed
+ * @return actionFactory which should be used to generate the actual actions.
+ */
+actionFactory *get_action_factory(const char *source);
+
 #endif //POSTINFIX_PARSEACTION_H

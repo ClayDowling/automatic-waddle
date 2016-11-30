@@ -21,31 +21,7 @@ struct ast *clean_operator_stack(struct parse_context *context)
     return last;
 }
 
-struct ast* parse_infix(const char *source)
-{
-    struct ast *node;
-    struct ast *last;
-    struct parse_context *context;
-    parseAction *action;
-    char x;
-
-    context = parse_context_create();
-
-    for(int i=0; source[i]; ++i) {
-        x = source[i];
-        node = ast_create(x);
-        action = get_infix_action(node);
-        action(node, context);
-    }
-
-    last = clean_operator_stack(context);
-
-    parse_context_release(context);
-
-    return last;
-}
-
-struct ast* parse_postfix(const char *source)
+struct ast* parse_from_factory(actionFactory *generator, const char *source)
 {
     struct ast *node;
     struct ast *last;
@@ -54,7 +30,7 @@ struct ast* parse_postfix(const char *source)
 
     for(int i=0; source[i]; ++i) {
         node = ast_create(source[i]);
-        action = get_postfix_action(node);
+        action = generator(node);
         action(node, context);
     }
 
@@ -62,3 +38,10 @@ struct ast* parse_postfix(const char *source)
     parse_context_release(context);
     return last;
 }
+
+struct ast* parse(const char *source)
+{
+    actionFactory *generator = get_action_factory(source);
+    return parse_from_factory(generator, source);
+}
+

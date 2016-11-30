@@ -72,3 +72,14 @@ parseAction* get_postfix_action(struct ast *node)
     return postfix_operation_action;
 }
 
+actionFactory *get_action_factory(const char *source)
+{
+    if (NULL == source) {
+        return NULL;
+    }
+    if (isalpha(source[0]) && isalpha(source[1])) {
+        return get_postfix_action;
+    }
+    return get_infix_action;
+}
+

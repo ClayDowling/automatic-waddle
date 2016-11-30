@@ -27,7 +27,7 @@ START_TEST(convert_infix_to_rpn)
     struct ast *tree;
     char *actual;
 
-    tree = parse_infix(cases[_i].infix);
+    tree = parse(cases[_i].infix);
     actual = ast_postfix(tree);
     ck_assert_str_eq(actual, cases[_i].rpn);
 
@@ -41,7 +41,7 @@ START_TEST(convert_infix_to_infix)
     struct ast *tree;
     char *actual;
 
-    tree = parse_infix(cases[_i].infix);
+    tree = parse(cases[_i].infix);
     actual = ast_infix(tree);
     ck_assert_str_eq(actual, cases[_i].infix);
 
@@ -55,7 +55,7 @@ START_TEST(convert_rpn_to_infix)
     struct ast *tree;
     char *actual;
 
-    tree = parse_postfix(cases[_i].rpn);
+    tree = parse(cases[_i].rpn);
     actual = ast_infix(tree);
     ck_assert_str_eq(actual, cases[_i].infix);
 
@@ -69,7 +69,7 @@ START_TEST(convert_rpn_to_rpn)
         struct ast *tree;
         char *actual;
 
-        tree = parse_postfix(cases[_i].rpn);
+        tree = parse(cases[_i].rpn);
         actual = ast_postfix(tree);
         ck_assert_str_eq(actual, cases[_i].rpn);
 

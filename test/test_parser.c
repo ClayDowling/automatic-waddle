@@ -7,7 +7,7 @@ START_TEST(parseInfix_aPlusB_returnsThreeNodesWithPlusAsParent)
 {
     struct ast *tree;
 
-    tree = parse_infix("a+b");
+    tree = parse("a+b");
 
     ck_assert_int_eq(tree->symbol, '+');
     ck_assert_int_eq(tree->left->symbol, 'a');
@@ -21,7 +21,7 @@ START_TEST(parseInfix_aPlusBMinusC_returnsFiveNodesWithPlusAsParent)
 {
     struct ast *tree;
 
-    tree = parse_infix("a+b-c");
+    tree = parse("a+b-c");
 
     ck_assert_int_eq(tree->symbol, '+');
     ck_assert_int_eq(tree->left->symbol, 'a');
@@ -42,7 +42,7 @@ START_TEST(parseInfix_aTimesBPlusC_returnsFiveNodesWithTimesChildOfPlus)
     struct ast *b;
     struct ast *c;
 
-    tree = parse_infix("a*b+c");
+    tree = parse("a*b+c");
 
     plus = tree;
     times = plus->left;
@@ -70,7 +70,7 @@ START_TEST(parseInfix_aTimesParenBPlusCParen_returnsThreeNodesWithBCChildOfTimes
         struct ast *c;
         char *asstring;
 
-        tree = parse_infix("a*(b+c)");
+        tree = parse("a*(b+c)");
 
         asstring = ast_postfix(tree);
 
