@@ -32,6 +32,26 @@ START_TEST(bufferAppend_calledWithA_willReturnAString)
 }
 END_TEST
 
+START_TEST(bufferAppend_givenBufferSizePlusOneAppends_returnsStringOfBufferSize)
+{
+    struct buffer *buf;
+    char *actual;
+
+    buf = buffer_create(BUFFER_SIZE);
+
+    for(int i=0; i <= BUFFER_SIZE; ++i) {
+        buffer_append(buf, 'X');
+    }
+
+    actual = buffer_as_string(buf);
+
+    ck_assert_int_eq(strlen(actual), BUFFER_SIZE);
+
+    free(actual);
+    buffer_release(buf);
+}
+END_TEST
+
 TCase *tcase_buffer(void)
 {
     TCase *tc;
@@ -39,6 +59,7 @@ TCase *tcase_buffer(void)
     tc = tcase_create("string-operations");
     tcase_add_test(tc, bufferCreate_returnsInitializedBuffer);
     tcase_add_test(tc, bufferAppend_calledWithA_willReturnAString);
+    tcase_add_test(tc, bufferAppend_givenBufferSizePlusOneAppends_returnsStringOfBufferSize);
 
     return tc;
 }

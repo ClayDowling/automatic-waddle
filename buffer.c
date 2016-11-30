@@ -32,7 +32,9 @@ void buffer_release(struct buffer *buf)
 
 void buffer_append(struct buffer *buf, char c)
 {
-    buf->data[buf->idx++] = c;
+    if (buf->idx < buf->size) {
+        buf->data[buf->idx++] = c;
+    }
 }
 
 char* buffer_as_string(struct buffer *buf)
