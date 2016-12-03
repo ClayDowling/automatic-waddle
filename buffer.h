@@ -1,6 +1,14 @@
 #ifndef POSTINFIX_BUFFER_H
 #define POSTINFIX_BUFFER_H
 
+/**
+ * @file buffer.h
+ *
+ * Character accumulation buffers.  Similar in concept to a string, but because the only operation
+ * necessary is appending, we can skip all of the other functions required to support a true string
+ * class.
+ */
+
 struct buffer;
 
 /**

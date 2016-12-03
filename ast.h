@@ -4,6 +4,14 @@
 #include "operator.h"
 
 /**
+ * @file ast.h
+ *
+ * Structure to represent Abstract Syntax Trees.  For more information see
+ * https://en.wikipedia.org/wiki/Abstract_syntax_tree
+ */
+
+
+/**
  * Represents a single variable or operation in an Abstract Syntax Tree
  */
 struct ast {

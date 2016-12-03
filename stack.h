@@ -3,6 +3,16 @@
 
 #include "ast.h"
 
+/**
+ * @file stack.h
+ *
+ * @brief Stack operations for AST nodes
+ *
+ * Create new stacks with stack_create()
+ * Release their resources with stack_release()
+ *
+ */
+
 struct stack;
 
 /**

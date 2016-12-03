@@ -2,6 +2,12 @@
 #ifndef POSTINFIX_PARSE_CONTEXT_H
 #define POSTINFIX_PARSE_CONTEXT_H
 
+/**
+ * @file parse_context.h
+ *
+ * Management functions for the parse_context structure used to maintain state during expression parsing.
+ */
+
 struct parse_context {
     struct stack *opstack; /** Operator stack */
     struct stack *expstack; /** Expression stack */
