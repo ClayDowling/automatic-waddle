@@ -35,4 +35,11 @@ parseAction* get_postfix_action(struct ast *node);
  */
 actionFactory *get_action_factory(const char *source);
 
+/**
+ * Safely apply an operator to available operands, signalling error if the operator cannot be applied.
+ * @param operator Operator to apply
+ * @param context Parse context
+ * @return 0 if the operators were applied successfully, 1 if there was an error.
+ */
+int apply_operator_to_operands(struct ast *operator, struct parse_context *context);
 #endif //POSTINFIX_PARSEACTION_H

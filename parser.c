@@ -9,9 +9,10 @@ struct ast *clean_operator_stack(struct parse_context *context)
 {
     struct ast *node;
     while((node = stack_pop(context->opstack)) != NULL) {
-        ast_attach_right(node, stack_pop(context->expstack));
-        ast_attach_left(node, stack_pop(context->expstack));
-        stack_push(context->expstack, node);
+        if (apply_operator_to_operands(node, context)) {
+            ast_release(node);
+            return NULL;
+        }
     }
     return stack_pop(context->expstack);
 }
