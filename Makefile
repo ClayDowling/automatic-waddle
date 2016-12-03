@@ -17,6 +17,12 @@ clean:
 test:
 	$(MAKE) -C test full
 
+Doxyfile:
+	doxygen -g
+
+doc: Doxyfile
+	doxygen
+
 $(LIBNAME): $(SRC)
 	ar r $@ $^
 
