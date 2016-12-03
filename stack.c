@@ -2,10 +2,13 @@
 
 #include "stack.h"
 
+/**
+ * Representation of a stack object.  Members should not be referenced outside of stack.c
+ */
 struct stack {
-    int size;
-    int idx;
-    struct ast **member;
+    int size; /**< maximum size of the stack */
+    int idx; /**< current index into member */
+    struct ast **member; /**< array holding the data in the stack */
 };
 
 struct stack *stack_create(int size)

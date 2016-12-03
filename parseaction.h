@@ -7,8 +7,10 @@
 /**
  * @file parseaction.h
  *
+ * @brief action factories for parsing.
+ *
  * Factories which will generate #parseAction functions to correctly handle each symbol found while parsing
- * s string.
+ * a string.  Also possibly an example of taking abstraction to the point of absurdity.
  *
  * Also contains the meta-factory get_action_factory() which will generate an appropriate #actionFactory
  * based on the contents of the source expression.

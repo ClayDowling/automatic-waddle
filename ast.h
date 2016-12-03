@@ -6,6 +6,8 @@
 /**
  * @file ast.h
  *
+ * @brief Abstract Syntax Tree structure.
+ *
  * Structure to represent Abstract Syntax Trees.  For more information see
  * https://en.wikipedia.org/wiki/Abstract_syntax_tree
  */
@@ -15,14 +17,20 @@
  * Represents a single variable or operation in an Abstract Syntax Tree
  */
 struct ast {
-	char symbol;		/** Symbol represented by this node */
-	int visited;		/** Has the node been visited during traversal */
-	struct operator_t *operator; /** Cached operator */
-	struct ast *parent;	/** Parent node, NULL if top of tree */
-	struct ast *left;	/** Node most immediately preceeding */
-	struct ast *right;	/** Node most immediately following */
+	char symbol;		/**< Symbol represented by this node */
+	int visited;		/**< Has the node been visited during traversal */
+	struct operator_t *operator; /**< Cached operator */
+	struct ast *parent;	/**< Parent node, NULL if top of tree */
+	struct ast *left;	/**< Node most immediately preceeding */
+	struct ast *right;	/**< Node most immediately following */
 };
 
+/**
+ * Prototype callback method which will be called on each node during a tree traversal.
+ * @param node AST node which we are operating on.
+ * @param userdata The userdata parameter from the call to the traverse function.  Useful for
+ *                 maintaining state between invocations.
+ */
 typedef void (*traverseCallback)(struct ast* node, void* userdata);
 
 /**

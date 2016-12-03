@@ -5,10 +5,13 @@
 
 #include "buffer.h"
 
+/**
+ * String accumulation buffer.  Members should not be referenced except by buffer functions.
+ */
 struct buffer {
-    char *data;
-    int size;
-    int idx;
+    char *data; /**< Accumulated data for this buffer */
+    int size; /**< Number of characters this buffer can hold */
+    int idx;  /**< Current insertion point into this buffer */
 };
 
 struct buffer *buffer_create(int size)

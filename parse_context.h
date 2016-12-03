@@ -5,12 +5,15 @@
 /**
  * @file parse_context.h
  *
- * Management functions for the parse_context structure used to maintain state during expression parsing.
+ * @brief Management functions for the parse_context structure used to maintain state during expression parsing.
  */
 
+/**
+ * State structure used during a parse operation
+ */
 struct parse_context {
-    struct stack *opstack; /** Operator stack */
-    struct stack *expstack; /** Expression stack */
+    struct stack *opstack; /**< Operator stack */
+    struct stack *expstack; /**< Expression stack */
 };
 
 /**

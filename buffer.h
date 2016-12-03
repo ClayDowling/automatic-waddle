@@ -4,6 +4,8 @@
 /**
  * @file buffer.h
  *
+ * @brief Output accumulators.
+ *
  * Character accumulation buffers.  Similar in concept to a string, but because the only operation
  * necessary is appending, we can skip all of the other functions required to support a true string
  * class.
