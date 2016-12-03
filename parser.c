@@ -8,17 +8,12 @@
 struct ast *clean_operator_stack(struct parse_context *context)
 {
     struct ast *node;
-    struct ast *last = NULL;
     while((node = stack_pop(context->opstack)) != NULL) {
         ast_attach_right(node, stack_pop(context->expstack));
         ast_attach_left(node, stack_pop(context->expstack));
         stack_push(context->expstack, node);
-        last = node;
     }
-    if (NULL == last) {
-        last = stack_peek(context->expstack);
-    }
-    return last;
+    return stack_pop(context->expstack);
 }
 
 struct ast* parse_from_factory(actionFactory *generator, const char *source)
@@ -31,7 +26,11 @@ struct ast* parse_from_factory(actionFactory *generator, const char *source)
     for(int i=0; source[i]; ++i) {
         node = ast_create(source[i]);
         action = generator(node);
-        action(node, context);
+        if (action(node, context)) {
+            parse_context_release(context);
+            ast_release(node);
+            return NULL;
+        }
     }
 
     last = clean_operator_stack(context);

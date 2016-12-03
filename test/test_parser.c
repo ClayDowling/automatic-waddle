@@ -61,7 +61,7 @@ START_TEST(parseInfix_aTimesBPlusC_returnsFiveNodesWithTimesChildOfPlus)
 END_TEST
 
 START_TEST(parseInfix_aTimesParenBPlusCParen_returnsThreeNodesWithBCChildOfTimes)
-    {
+{
         struct ast *tree;
         struct ast *plus;
         struct ast *times;
@@ -78,9 +78,18 @@ START_TEST(parseInfix_aTimesParenBPlusCParen_returnsThreeNodesWithBCChildOfTimes
 
         free(asstring);
         ast_release(tree);
-    }
+}
 END_TEST
 
+START_TEST(parse_givenUnbalancedParens_returnsNull)
+{
+    struct ast *tree;
+
+    tree = parse("a+b)*c");
+
+    ck_assert_ptr_eq(tree, NULL);
+}
+END_TEST
 
 TCase *tcase_parse_infix(void) {
     TCase *tc;
@@ -90,6 +99,8 @@ TCase *tcase_parse_infix(void) {
     tcase_add_test(tc, parseInfix_aPlusBMinusC_returnsFiveNodesWithPlusAsParent);
     tcase_add_test(tc, parseInfix_aTimesBPlusC_returnsFiveNodesWithTimesChildOfPlus);
     tcase_add_test(tc, parseInfix_aTimesParenBPlusCParen_returnsThreeNodesWithBCChildOfTimes);
+    tcase_add_test(tc, parse_givenUnbalancedParens_returnsNull);
+
     return tc;
 }
 

@@ -4,7 +4,13 @@
 #include "ast.h"
 #include "parse_context.h"
 
-typedef void (parseAction)(struct ast *node, struct parse_context *context);
+/**
+ * Prototype for a function which will take an appropriate parser action for this node
+ * @param node on which to take action
+ * @param context parse_context which holds state for this run of the parser
+ * @return 0 if the action completed successfully, something else if there was an error
+ */
+typedef int (parseAction)(struct ast *node, struct parse_context *context);
 
 typedef parseAction* (actionFactory)(struct ast *node);
 

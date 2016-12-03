@@ -7,19 +7,32 @@
 #include "stack.h"
 #include "operator.h"
 
-void right_paren_action(struct ast *node, struct parse_context *context)
+int right_paren_action(struct ast *node, struct parse_context *context)
 {
     struct ast *last;
-    for(last = stack_pop(context->opstack); last->symbol != '('; last = stack_pop(context->opstack)) {
-        ast_attach_right(last, stack_pop(context->expstack));
-        ast_attach_left(last, stack_pop(context->expstack));
+    struct ast *left;
+    struct ast *right;
+
+
+    for(last = stack_pop(context->opstack); last && last->symbol != '('; last = stack_pop(context->opstack)) {
+        right = stack_pop(context->expstack);
+        left = stack_pop(context->expstack);
+
+        ast_attach_right(last, right);
+        ast_attach_left(last, left);
         stack_push(context->expstack, last);
     }
+    if (NULL == last) { // Did not find left paren
+        return 1;
+    }
+
     ast_release(last);
     ast_release(node);
+
+    return 0;
 }
 
-void operation_action(struct ast *node, struct parse_context *context)
+int operation_action(struct ast *node, struct parse_context *context)
 {
     struct ast *last;
     for(last = stack_peek(context->opstack);
@@ -31,23 +44,31 @@ void operation_action(struct ast *node, struct parse_context *context)
         stack_push(context->expstack, last);
     }
     stack_push(context->opstack, node);
+
+    return 0;
 }
 
-void postfix_operation_action(struct ast *node, struct parse_context *context)
+int postfix_operation_action(struct ast *node, struct parse_context *context)
 {
     ast_attach_right(node, stack_pop(context->expstack));
     ast_attach_left(node, stack_pop(context->expstack));
     stack_push(context->expstack, node);
+
+    return 0;
 }
 
-void leftparen_action(struct ast *node, struct parse_context *context)
+int leftparen_action(struct ast *node, struct parse_context *context)
 {
     stack_push(context->opstack, node);
+
+    return 0;
 }
 
-void variable_action(struct ast *node, struct parse_context *context)
+int variable_action(struct ast *node, struct parse_context *context)
 {
     stack_push(context->expstack, node);
+
+    return 0;
 }
 
 parseAction* get_infix_action(struct ast *node)

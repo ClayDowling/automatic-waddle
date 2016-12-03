@@ -12,9 +12,18 @@ struct parse_context* parse_context_create()
     return c;
 }
 
+void parse_context_release_contents(struct stack *s)
+{
+    while(NULL != stack_peek(s)) {
+        ast_release(stack_pop(s));
+    }
+}
+
 void parse_context_release(struct parse_context *ctx)
 {
     if (NULL != ctx) {
+        parse_context_release_contents(ctx->opstack);
+        parse_context_release_contents(ctx->expstack);
         stack_release(ctx->opstack);
         stack_release(ctx->expstack);
         free(ctx);
