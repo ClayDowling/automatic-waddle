@@ -111,6 +111,16 @@ START_TEST(parse_givenTwoOperandsAndTwoOperatorsForInfix_returnsNull)
 }
 END_TEST
 
+START_TEST(parse_givenOneOperandAndOneOperatorInParens_returnsNull)
+{
+    struct ast *tree;
+
+    tree = parse("(a+)*c");
+
+    ck_assert_ptr_eq(tree, NULL);
+}
+END_TEST
+
 TCase *tcase_parse_infix(void) {
     TCase *tc;
 
@@ -122,6 +132,7 @@ TCase *tcase_parse_infix(void) {
     tcase_add_test(tc, parse_givenUnbalancedParens_returnsNull);
     tcase_add_test(tc, parse_givenTwoOperandsAndTwoOperatorsForPostfix_returnsNull);
     tcase_add_test(tc, parse_givenTwoOperandsAndTwoOperatorsForInfix_returnsNull);
+    tcase_add_test(tc, parse_givenOneOperandAndOneOperatorInParens_returnsNull);
 
     return tc;
 }

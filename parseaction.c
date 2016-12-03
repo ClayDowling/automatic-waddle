@@ -35,12 +35,10 @@ int right_paren_action(struct ast *node, struct parse_context *context)
     struct ast *right;
 
     for(last = stack_pop(context->opstack); last && last->symbol != '('; last = stack_pop(context->opstack)) {
-        right = stack_pop(context->expstack);
-        left = stack_pop(context->expstack);
-
-        ast_attach_right(last, right);
-        ast_attach_left(last, left);
-        stack_push(context->expstack, last);
+        if (apply_operator_to_operands(last, context)) {
+            ast_release(last);
+            return 1;
+        }
     }
     if (NULL == last) { // Did not find left paren
         return 1;
