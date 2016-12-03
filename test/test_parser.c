@@ -91,6 +91,16 @@ START_TEST(parse_givenUnbalancedParens_returnsNull)
 }
 END_TEST
 
+START_TEST(parse_givenTwoOperandsAndTwoOperators_returnsNull)
+{
+    struct ast *tree;
+
+    tree = parse("ab++");
+
+    ck_assert_ptr_eq(tree, NULL);
+}
+END_TEST
+
 TCase *tcase_parse_infix(void) {
     TCase *tc;
 
@@ -100,6 +110,7 @@ TCase *tcase_parse_infix(void) {
     tcase_add_test(tc, parseInfix_aTimesBPlusC_returnsFiveNodesWithTimesChildOfPlus);
     tcase_add_test(tc, parseInfix_aTimesParenBPlusCParen_returnsThreeNodesWithBCChildOfTimes);
     tcase_add_test(tc, parse_givenUnbalancedParens_returnsNull);
+    tcase_add_test(tc, parse_givenTwoOperandsAndTwoOperators_returnsNull);
 
     return tc;
 }

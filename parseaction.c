@@ -7,12 +7,32 @@
 #include "stack.h"
 #include "operator.h"
 
+int apply_operator_to_operands(struct ast *operator, struct parse_context *context)
+{
+    struct ast *left;
+    struct ast *right;
+
+    right = stack_pop(context->expstack);
+    left = stack_pop(context->expstack);
+
+    if (!right || !left) {
+        if (right)
+            ast_release(right);
+        return 1;
+    }
+
+    ast_attach_right(operator, right);
+    ast_attach_left(operator, left);
+    stack_push(context->expstack, operator);
+
+    return 0;
+}
+
 int right_paren_action(struct ast *node, struct parse_context *context)
 {
     struct ast *last;
     struct ast *left;
     struct ast *right;
-
 
     for(last = stack_pop(context->opstack); last && last->symbol != '('; last = stack_pop(context->opstack)) {
         right = stack_pop(context->expstack);
@@ -39,9 +59,10 @@ int operation_action(struct ast *node, struct parse_context *context)
         NULL != last && node->operator->precedence <= last->operator->precedence;
         last = stack_peek(context->opstack)) {
         stack_pop(context->opstack);
-        ast_attach_right(last, stack_pop(context->expstack));
-        ast_attach_left(last, stack_pop(context->expstack));
-        stack_push(context->expstack, last);
+
+        if (apply_operator_to_operands(last, context)) {
+            return 1;
+        }
     }
     stack_push(context->opstack, node);
 
@@ -50,11 +71,7 @@ int operation_action(struct ast *node, struct parse_context *context)
 
 int postfix_operation_action(struct ast *node, struct parse_context *context)
 {
-    ast_attach_right(node, stack_pop(context->expstack));
-    ast_attach_left(node, stack_pop(context->expstack));
-    stack_push(context->expstack, node);
-
-    return 0;
+    return apply_operator_to_operands(node, context);
 }
 
 int leftparen_action(struct ast *node, struct parse_context *context)
